@@ -37,7 +37,7 @@ def preprocess_text(text: str) -> str:
 # =====================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
-MODEL_DIR = os.path.join(BASE_DIR, "..", "models")
+MODEL_DIR = os.path.join(BASE_DIR, "models")
 
 # =====================================
 # APP INIT
