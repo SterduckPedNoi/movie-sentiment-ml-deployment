@@ -99,7 +99,7 @@ for v in os.listdir(MODEL_DIR):
             "path": vp
         }
 
-print("📦 Available models:", list(model_registry.keys())
+print("📦 Available models:", list(model_registry.keys()))
 
 def load_model(name: str):
     if name in models:
