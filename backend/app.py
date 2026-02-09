@@ -282,7 +282,8 @@ def compare(req: CompareRequest):
         "tags": req.tags,
         "results": results
     }
-TMDB_KEY = "b8bb30d4d7982957599bec0cdd3ba9dd"
+TMDB_KEY = os.getenv("TMDB_KEY")
+
 
 @app.get("/search_movie")
 def search_movie(q: str = Query("", min_length=1)):
