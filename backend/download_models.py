@@ -10,8 +10,6 @@ os.makedirs(MODELS_DIR, exist_ok=True)
 MODELS = {
     "v6_transformer": "1ViTgT3aeQaME9NeXIJgzCMT1QfBV7D9h",
     "v7_albert": "1PEvge81aNMP2apqJCuNG-ReFbXpwaPva",
-    "v8_distilroberta": "1yVzwkyAzE7ze5FJTyL1HI2qnmCyg9QFT",
-    "v9_minilm": "1U7eEE3HFRKUfYZsDyos0udu-GQKtBq8K",
     "v10_minilm_l6": "1vDAiXvvyklwZ5HvFCXNxRgVetW7egDL8",
 }
 
