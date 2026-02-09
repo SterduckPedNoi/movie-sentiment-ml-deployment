@@ -68,7 +68,6 @@ app.add_middleware(
 
 
 models = {}
-model_registry = {} 
 
 def is_transformer_dir(path: str) -> bool:
     return (
@@ -81,78 +80,68 @@ for v in os.listdir(MODEL_DIR):
     if not os.path.isdir(vp):
         continue
 
+    model_path = os.path.join(vp, "model") if os.path.isdir(os.path.join(vp, "model")) else vp
+
+    # ================================
+    # TRANSFORMER
+    # ================================
     if is_transformer_dir(vp):
-        model_registry[v] = {
-            "type": "transformer",
-            "path": vp
-        }
+        try:
+            if v == "v6_transformer":
+                model = DistilBertForSequenceClassification.from_pretrained(model_path)
+                tokenizer = DistilBertTokenizerFast.from_pretrained(model_path)
+            else:
+                model = AutoModelForSequenceClassification.from_pretrained(
+                    model_path, local_files_only=True
+                )
+                tokenizer = AutoTokenizer.from_pretrained(
+                    model_path, local_files_only=True
+                )
 
-    elif v == "v5_ensemble":
-        model_registry[v] = {
-            "type": "ensemble",
-            "path": vp
-        }
+            models[v] = {
+                "type": "transformer",
+                "model": model,
+                "tokenizer": tokenizer
+            }
+            print(f"✅ Loaded {v}")
+            continue
 
-    else:
-        model_registry[v] = {
+        except Exception as e:
+            print(f"❌ Failed to load transformer {v}:", e)
+            continue
+
+    # ================================
+    # ENSEMBLE
+    # ================================
+    if v == "v5_ensemble":
+        try:
+            models[v] = {
+                "type": "ensemble",
+                "vectorizer": joblib.load(os.path.join(vp, "vectorizer.joblib")),
+                "lr": joblib.load(os.path.join(vp, "logistic.joblib")),
+                "svm": joblib.load(os.path.join(vp, "svm.joblib"))
+            }
+            print("✅ Loaded v5_ensemble")
+        except Exception as e:
+            print("❌ Failed to load v5_ensemble:", e)
+        continue
+
+    # ================================
+    # CLASSIC ML
+    # ================================
+    try:
+        models[v] = {
             "type": "single",
-            "path": vp
+            "model": joblib.load(os.path.join(vp, "model.joblib")),
+            "vectorizer": joblib.load(os.path.join(vp, "vectorizer.joblib"))
         }
+        print(f"✅ Loaded {v}")
 
-print("📦 Available models:", list(model_registry.keys()))
+    except Exception as e:
+        print(f"⏭️ Skipped {v}:", e)
 
-def load_model(name: str):
-    if name in models:
-        return models[name]
+print("🚀 Models Ready:", list(models.keys()))
 
-    meta = model_registry.get(name)
-    if not meta:
-        return None
-
-    print(f"🧠 Loading model {name}...")
-    path = meta["path"]
-
-    if meta["type"] == "transformer":
-        if name == "v6_transformer":
-            model = DistilBertForSequenceClassification.from_pretrained(path)
-            tokenizer = DistilBertTokenizerFast.from_pretrained(path)
-        else:
-            model = AutoModelForSequenceClassification.from_pretrained(
-                path, local_files_only=True
-            )
-            tokenizer = AutoTokenizer.from_pretrained(
-                path, local_files_only=True
-            )
-        model.eval()
-        model = model.to("cpu")
-
-        models[name] = {
-            "type": "transformer",
-            "model": model,
-            "tokenizer": tokenizer
-        }
-
-    elif meta["type"] == "ensemble":
-        models[name] = {
-            "type": "ensemble",
-            "vectorizer": joblib.load(os.path.join(path, "vectorizer.joblib")),
-            "lr": joblib.load(os.path.join(path, "logistic.joblib")),
-            "svm": joblib.load(os.path.join(path, "svm.joblib"))
-        }
-
-    else:
-        models[name] = {
-            "type": "single",
-            "model": joblib.load(os.path.join(path, "model.joblib")),
-            "vectorizer": joblib.load(os.path.join(path, "vectorizer.joblib"))
-        }
-
-    return models[name]
-def unload_model(name: str):
-    if name in models:
-        print(f"🧹 Unloading {name}")
-        del models[name]
-        torch.cuda.empty_cache()
 
 # =====================================
 # SCHEMA
@@ -248,30 +237,24 @@ def health():
 
 @app.get("/models")
 def list_models():
-    return list(model_registry.keys())
+    return list(models.keys())
 
 @app.get("/model/info")
 def model_info():
-    return {
-        k: {"type": v["type"]}
-        for k, v in model_registry.items()
-    }
+    return {k: {"type": v["type"]} for k, v in models.items()}
 
 @app.post("/predict")
 def predict(req: CompareRequest):
-    m = load_model(req.model_a)
+    m = models.get(req.model_a)
     if not m:
         return {"error": "model not found"}
 
-    try:
-        if m["type"] == "transformer":
-            return predict_transformer(m, req.text)
-        elif m["type"] == "ensemble":
-            return predict_ensemble(m, req.text)
-        else:
-            return predict_single(m, req.text)
-    finally:
-        unload_model(req.model_a)
+    if m["type"] == "transformer":
+        return predict_transformer(m, req.text)
+    elif m["type"] == "ensemble":
+        return predict_ensemble(m, req.text)
+    else:
+        return predict_single(m, req.text)
 
 @app.post("/compare")
 def compare(req: CompareRequest):
@@ -281,31 +264,26 @@ def compare(req: CompareRequest):
         if not name:
             continue
 
-        m = load_model(name)
+        m = models.get(name)
         if not m:
             results[name] = {"error": "model not found"}
             continue
 
-        try:
-            if m["type"] == "transformer":
-                r = predict_transformer(m, req.text)
-            elif m["type"] == "ensemble":
-                r = predict_ensemble(m, req.text)
-            else:
-                r = predict_single(m, req.text)
+        if m["type"] == "transformer":
+            r = predict_transformer(m, req.text)
+        elif m["type"] == "ensemble":
+            r = predict_ensemble(m, req.text)
+        else:
+            r = predict_single(m, req.text)
 
-            r["keywords"] = extract_keywords(req.text)
-            results[name] = r
-
-        finally:
-            unload_model(name)
+        r["keywords"] = extract_keywords(req.text)
+        results[name] = r
 
     return {
         "movie_name": req.movie_name,
         "tags": req.tags,
         "results": results
     }
-
 TMDB_KEY = os.getenv("TMDB_KEY")
 
 
