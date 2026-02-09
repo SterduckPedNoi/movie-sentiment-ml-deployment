@@ -1,3 +1,4 @@
+print("🚀 main.py started")
 # =====================================
 # IMPORT
 # =====================================
@@ -39,6 +40,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
 MODEL_DIR = os.path.join(BASE_DIR, "models")
 
+os.makedirs(MODEL_DIR, exist_ok=True)
 # =====================================
 # APP INIT
 # =====================================
