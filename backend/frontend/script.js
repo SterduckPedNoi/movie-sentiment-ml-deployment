@@ -1,11 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-document.addEventListener("click", (e) => {
-  if (!movieInput.contains(e.target) &&
-      !suggestionBox.contains(e.target)) {
-    suggestionBox.classList.add("hidden");
-  }
-});
-
   // ================= CONFIG =================
   const API_BASE = window.location.origin;
   const API_COMPARE = API_BASE + "/compare";
@@ -43,8 +36,18 @@ document.addEventListener("click", (e) => {
   const analyzeBtn = document.getElementById("analyzeBtn");
   const reviewText = document.getElementById("reviewText");
   const loadingSection = document.getElementById("loadingSection");
+
   const movieInput = document.getElementById("movieName");
   const suggestionBox = document.getElementById("movieSuggestions");
+  document.addEventListener("click", (e) => {
+    if (
+      !movieInput.contains(e.target) &&
+      !suggestionBox.contains(e.target)
+    ) {
+     suggestionBox.classList.add("hidden");
+    }
+  });
+
   const result = document.getElementById("result");
   const resultSection = document.getElementById("resultSection");
   const movieTitleShow = document.getElementById("movieTitleShow");
@@ -75,6 +78,9 @@ document.addEventListener("click", (e) => {
 
 
 /* ================= TAG SYSTEM ================= */
+reviewText.addEventListener("input", () => {
+  setStep("input");
+});
 addTagBtn.onclick = () => {
   const t = tagSelect.value;
   if (!t || tags.includes(t)) return;
@@ -103,6 +109,7 @@ window.removeTag = function (t) {
 
 /* ================= ANALYZE ================= */
 analyzeBtn.onclick = async () => {
+  setStep("analyze")
   if (!reviewText.value.trim()) {
     alert("Please write a review. 😅");
     return;
@@ -129,7 +136,6 @@ analyzeBtn.onclick = async () => {
 
     const data = await res.json();
     renderResult(data);
-
   } catch (err) {
     alert("❌ Analysis failed. Please try again.");
     console.error(err);
@@ -141,6 +147,7 @@ analyzeBtn.onclick = async () => {
   loadingSection.classList.add("hidden");
 };
 function renderResult(data) {
+  setStep("result");
   result.innerHTML = "";
   resultSection.classList.remove("hidden");
 
@@ -150,6 +157,22 @@ function renderResult(data) {
   tagShow.innerHTML = data.tags.map(t =>
     `<span class="bg-white/10 px-3 py-1 rounded-full text-sm">${t}</span>`
   ).join("");
+
+  const models = Object.entries(data.results);
+if (models.length === 2) {
+  const [m1, r1] = models[0];
+  const [m2, r2] = models[1];
+
+  const winner =
+    r1.confidence > r2.confidence ? m1 : m2;
+
+  document.getElementById("summaryBox").innerHTML = `
+    🏆 <b>${winner}</b> gives higher confidence
+    (${Math.round(Math.max(r1.confidence, r2.confidence) * 100)}%)
+  `;
+  document.getElementById("summaryBox").classList.remove("hidden");
+}
+
 
   for (const [m, r] of Object.entries(data.results)) {
     const positive = r.sentiment === "Positive";
@@ -259,3 +282,24 @@ movieInput.addEventListener("input", () => {
     renderTags();
   }
 });
+function setStep(step) {
+  const steps = ["input", "analyze", "result"];
+
+  steps.forEach(s => {
+    const el = document.getElementById(`step-${s}`);
+    el.classList.add("opacity-50", "text-slate-400");
+    el.classList.remove("text-purple-400", "font-medium");
+
+    el.querySelector("span").classList.remove("bg-purple-400");
+    el.querySelector("span").classList.add("bg-slate-500");
+  });
+
+  const active = document.getElementById(`step-${step}`);
+  active.classList.remove("opacity-50", "text-slate-400");
+  active.classList.add("text-purple-400", "font-medium");
+
+  active.querySelector("span").classList.remove("bg-slate-500");
+  active.querySelector("span").classList.add("bg-purple-400");
+}
+
+
