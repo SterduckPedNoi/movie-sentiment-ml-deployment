@@ -27,13 +27,14 @@ It is designed for learning purposes, portfolio showcasing, and real-world API u
 
 | Layer | Technology |
 |------|------------|
-| Language | Python / JavaScript / HTML / CSS |
+| Language | Python / JavaScript / CSS / HTML |
 | Machine Learning | Scikit-learn / NLP Model |
 | Backend | FastAPI |
 | Server | Uvicorn |
 | Cloud Platform | Render |
 
 ---
+
 ## 📂 Project Structure
 
 ```
@@ -62,8 +63,6 @@ movie-sentiment-ml-deployment/
 
 > The frontend is served from the `backend/frontend/` directory  
 > while all ML models are managed under `backend/models/`.
-
-```
 
 ---
 
