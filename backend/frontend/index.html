@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <title>NahPuean AI – Movie Review Analyzer</title>
+  <title>Data Scene – Movie Review Analyzer</title>
 
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -47,7 +47,7 @@
     id="movieName"
     class="input"
     type="text"
-    placeholder="Parasite (2019)"
+    placeholder="The Avengers (2012)"
   />
 
   <div
@@ -65,7 +65,8 @@
   <label class="text-sm font-medium text-slate-300 mt-4 block">เขียนรีวิวหนัง</label>
   <textarea id="reviewText"
     class="input h-28"
-    placeholder="หนังโคตรกดดัน แต่เล่าเรื่องดี ดูแล้วหยุดคิดไม่ได้..."></textarea>
+    placeholder="I wanted to like this sci-fi movie, but I couldn't. I hated the plot
+..."></textarea>
 
   <!-- TAGS -->
   <label class="text-sm font-medium text-slate-300 mt-4 block">Tags หนัง</label>
@@ -113,6 +114,11 @@
   <button id="analyzeBtn" class="btn-primary mt-10">
     🚀 Analyze Review
   </button>
+  <div id="loadingSection"
+       class="hidden mt-6 flex items-center gap-3 text-slate-300">
+    <div class="w-5 h-5 border-2 border-white/30 border-t-purple-400 rounded-full animate-spin"></div>
+    <span>⏳ Loading models…</span>
+  </div>
 
 <div id="errorSection" class="hidden"></div>
 
@@ -120,7 +126,7 @@
 
   <!-- RESULT -->
   <div id="resultSection" class="mt-12 hidden animate-fadeIn">
-    <h2 class="text-2xl font-bold mb-2">📊 ผลการวิเคราะห์</h2>
+    <h2 class="text-2xl font-bold mb-2">📊 Result</h2>
     <p id="movieTitleShow" class="text-slate-400 mb-3"></p>
     <div id="tagShow" class="flex gap-2 mb-6 flex-wrap"></div>
     <div id="result" class="grid grid-cols-2 gap-6"></div>
