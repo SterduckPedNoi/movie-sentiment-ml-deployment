@@ -107,8 +107,20 @@
   <!-- TAGS -->
   <label class="text-sm font-medium text-slate-300 mt-4 block">Tags หนัง</label>
   <div class="flex gap-2 mt-2">
-    <select id="tagSelect" class="input">
-      <option value="">เลือก Tag ⌄</option>
+    <div class="relative w-64">
+  <button id="tagDropdownBtn"
+    class="input flex justify-between items-center">
+    <span id="tagDropdownLabel">เลือก Tag </span>
+    <span class="opacity-60">▾</span>
+  </button>
+
+  <div id="tagDropdown"
+    class="tag-dropdown absolute z-50 mt-2 w-full hidden
+         bg-[#050508]/95 backdrop-blur-xl
+         border border-white/10 rounded-2xl
+         shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
+         <div class="tag-scroll"></div>
+      <option value="">เลือก Tag</option>
       <option>🎬 Action</option>
       <option>🧭 Adventure</option>
       <option>😂 Comedy</option>
@@ -128,23 +140,50 @@
       <option>🤠 Western</option>
       <option>🏛️ History</option>
 
-    </select>
-    <button id="addTagBtn" class="btn-secondary">+ เพิ่ม</button>
+      </div>
+</div>
   </div>
 
   <div id="tagContainer" class="flex gap-2 mt-3 flex-wrap"></div>
 
   <!-- MODELS -->
   <div class="grid grid-cols-2 gap-4 mt-6">
-    <div>
-      <label class="text-sm font-medium text-slate-300">Model A</label>
-      <select id="modelA" class="input"></select>
-    </div>
-    <div>
-      <label class="text-sm font-medium text-slate-300">Model B</label>
-      <select id="modelB" class="input"></select>
+  <!-- MODEL A -->
+  <div class="relative">
+    <label class="text-sm font-medium text-slate-300">Model A</label>
+    <button id="modelABtn"
+      class="input flex justify-between items-center mt-1">
+      <span id="modelALabel">เลือก Model </span>
+      <span class="opacity-60">▾</span>
+    </button>
+
+    <div id="modelABox"
+  class="model-dropdown absolute z-50 mt-2 w-full hidden
+         bg-[#050508]/95 backdrop-blur-xl
+         border border-white/10 rounded-2xl
+         shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
+<div class="model-scroll"></div>
     </div>
   </div>
+
+  <!-- MODEL B -->
+  <div class="relative">
+    <label class="text-sm font-medium text-slate-300">Model B</label>
+    <button id="modelBBtn"
+      class="input flex justify-between items-center mt-1">
+      <span id="modelBLabel">เลือก Model </span>
+      <span class="opacity-60">▾</span>
+    </button>
+
+    <div id="modelBBox"
+      class="model-dropdown absolute z-50 mt-2 w-full hidden
+         bg-[#050508]/95 backdrop-blur-xl
+         border border-white/10 rounded-2xl
+         shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
+         <div class="model-scroll"></div>
+    </div>
+  </div>
+</div>
 
   <!-- BUTTON -->
   <button id="analyzeBtn" class="btn-primary mt-10">
