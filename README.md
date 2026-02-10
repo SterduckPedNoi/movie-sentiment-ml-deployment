@@ -137,9 +137,17 @@ pip install -r requirements.txt && python download_models.py
 uvicorn main:app --host 0.0.0.0 --port $PORT
 ```
 
-**Python Version**
+### Environment
+
+Set the Environment for python version
+
+**Key**
 ```
-Defined in runtime.txt
+PYTHON_VERSION
+```
+**Value**
+```
+3.10.13
 ```
 
 ---
