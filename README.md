@@ -44,7 +44,6 @@ movie-sentiment-ml-deployment/
 │   ├── main.py                 # FastAPI entry point
 │   ├── download_models.py      # Download ML models from this GitHub repository
 │   ├── requirements.txt        # Backend dependencies
-│   ├── runtime.txt             # Python version for Render
 │   │
 │   ├── models/                 # Trained ML models
 │   │   ├── v1_baseline/
@@ -57,6 +56,8 @@ movie-sentiment-ml-deployment/
 │       ├── index.html
 │       ├── script.js
 │       └── style.css
+│
+├── runtime.txt             # Python version for Render
 │
 └── README.md
 ```
