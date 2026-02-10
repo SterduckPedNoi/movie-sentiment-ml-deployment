@@ -78,3 +78,15 @@
 #movieSuggestions div:hover {
   background: rgba(168, 85, 247, 0.25); /* purple hover */
 }
+.input:hover {
+  background: rgba(255,255,255,0.14);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+#movieSuggestions {
+  animation: fadeIn 0.2s ease-out;
+}
+
