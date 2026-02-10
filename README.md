@@ -34,11 +34,6 @@ It is designed for learning purposes, portfolio showcasing, and real-world API u
 | Cloud Platform | Render |
 
 ---
-
-## 📂 Project Structure
-
-```
-movie-sentiment-ml-deployment/
 ## 📂 Project Structure
 
 ```
