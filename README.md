@@ -56,9 +56,10 @@ movie-sentiment-ml-deployment/
 
 ```bash
 git clone https://github.com/SterduckPedNoi/movie-sentiment-ml-deployment.git
-cd movie-sentiment-ml-deployment
-2️⃣ Install Dependencies
-python -m venv venv
+cd movie-sentiment-ml-deployment ```
+
+### 2️⃣ Install Dependencies
+``` python -m venv venv
 source venv/bin/activate    # macOS / Linux
 venv\Scripts\activate       # Windows
 
@@ -134,6 +135,7 @@ Response
   "prediction": "Positive",
   "confidence": 0.92
 }
+```
 
 🎯 Use Cases
 
