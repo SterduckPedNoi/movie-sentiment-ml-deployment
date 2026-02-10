@@ -122,6 +122,10 @@ Set the following commands in Render:
 ```bash
 backend
 ```
+**Language**
+```bash
+Python 3
+```
 
 **Build Command**
 ```bash
