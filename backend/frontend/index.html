@@ -12,34 +12,71 @@
 <script src="/static/script.js" defer></script>
 </head>
 
-<body class="bg-[#0b0f1a] min-h-screen flex items-center justify-center text-slate-100">
+<body class="bg-[#050508] text-slate-100 min-h-screen
+             flex items-center justify-center font-sans">
 
-<!-- BACKGROUND GLOW -->
-<div class="fixed inset-0 -z-10">
-  <div class="absolute top-[-200px] left-[-200px] w-[500px] h-[500px] bg-purple-600/30 rounded-full blur-[120px]"></div>
-  <div class="absolute bottom-[-200px] right-[-200px] w-[500px] h-[500px] bg-blue-500/30 rounded-full blur-[120px]"></div>
+
+<!-- CINEMATIC BACKGROUND -->
+<!-- PURPLE NOIR BACKGROUND -->
+<div class="fixed inset-0 -z-10 overflow-hidden bg-[#050508]">
+  <div class="absolute inset-0
+    bg-[radial-gradient(circle_at_top,_rgba(139,92,246,0.25),_transparent_60%)]">
+  </div>
+
+  <div class="absolute inset-0
+    bg-[radial-gradient(circle_at_bottom,_rgba(76,29,149,0.35),_transparent_65%)]">
+  </div>
 </div>
 
-<div class="bg-white/5 backdrop-blur-xl border border-white/10
-            w-full max-w-5xl p-10 rounded-3xl
-            shadow-[0_30px_80px_rgba(0,0,0,0.6)]
-            relative overflow-visible">
 
+<div class="bg-[#0f0f14]/90 backdrop-blur-2xl
+            border border-white/10
+            w-full max-w-6xl p-12 rounded-[2rem]
+            shadow-[0_40px_120px_rgba(0,0,0,0.9)]
+            relative">
   <!-- HEADER -->
-  <div class="mb-10">
-    <h1 class="text-4xl font-extrabold tracking-tight">
-      🎬 Data
-      <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
-        Scene
-      </span>
-    </h1>
-    <p class="text-slate-400 mt-2 max-w-xl">
-      Transformer-based Movie Review Sentiment Analyzer  
-      with Real-time Model Comparison
-    </p>
+  <div class="mb-14">
+  <h1 class="text-5xl font-black tracking-tight">
+    <span
+      class="text-transparent bg-clip-text
+             bg-gradient-to-r from-purple-400 via-violet-400 to-indigo-400
+             drop-shadow-[0_0_35px_rgba(139,92,246,0.65)]">
+      🎬 DATA
+    </span>
+    <span class="ml-2">SCENE</span>
+  </h1>
+
+  <p class="text-slate-400 mt-3 max-w-xl text-lg">
+    Cinematic Movie Review Sentiment Analyzer
+  </p>
+
+      <div class="flex items-center gap-8 mt-8 mb-12 text-xs uppercase tracking-[0.3em]">
+        <span id="step-input"
+    class="flex items-center gap-2 text-purple-400 font-medium">
+    <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+    Input
+  </span>
+<div class="h-[1px] w-16 bg-white/15"></div>
+
+  <span id="step-analyze"
+    class="flex items-center gap-2 text-slate-400 opacity-50">
+    <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+    Analyze
+  </span>
+
+  <div class="h-[1px] w-16 bg-white/15"></div>
+
+  <span id="step-result"
+    class="flex items-center gap-2 text-slate-400 opacity-50">
+    <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+    Result
+  </span>
+</div>
+
   </div>
 
   <!-- MOVIE NAME -->
+
   <label class="text-sm font-medium text-slate-300">ชื่อหนัง</label>
 
 <div class="relative">
@@ -65,7 +102,7 @@
   <label class="text-sm font-medium text-slate-300 mt-4 block">เขียนรีวิวหนัง</label>
   <textarea id="reviewText"
     class="input h-28"
-    placeholder="I wanted to like this sci-fi movie, but I couldn't. I hated the plot..."></textarea>
+    placeholder="I wanted to like this sci-fi movie, but I couldn't. I hate..."></textarea>
 
   <!-- TAGS -->
   <label class="text-sm font-medium text-slate-300 mt-4 block">Tags หนัง</label>
@@ -117,6 +154,13 @@
        class="hidden mt-6 flex items-center gap-3 text-slate-300">
     <div class="w-5 h-5 border-2 border-white/30 border-t-purple-400 rounded-full animate-spin"></div>
     <span>⏳ Loading models…</span>
+    <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+  <div id="fakeProgress"
+       class="h-full bg-gradient-to-r from-purple-400 to-blue-400
+              animate-pulse"
+       style="width: 60%"></div>
+</div>
+
   </div>
 
 <div id="errorSection" class="hidden"></div>
@@ -128,6 +172,12 @@
     <h2 class="text-2xl font-bold mb-2">📊 Result</h2>
     <p id="movieTitleShow" class="text-slate-400 mb-3"></p>
     <div id="tagShow" class="flex gap-2 mb-6 flex-wrap"></div>
+    <div id="summaryBox"
+  class="mb-6 p-5 rounded-2xl
+         bg-gradient-to-r from-purple-500/10 to-blue-500/10
+         border border-white/10 hidden">
+</div>
+
     <div id="result" class="grid grid-cols-2 gap-6"></div>
   </div>
 
