@@ -5,6 +5,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let tags = [];
   
+  const TAGS = [
+  "🎬 Action","🧭 Adventure","😂 Comedy","🎭 Drama","😱 Horror",
+  "🔪 Thriller","❤️ Romance","🚀 Science Fiction","🧙 Fantasy",
+  "🕵️ Mystery","🚓 Crime","🎨 Animation","📚 Documentary",
+  "👨‍👩‍👧 Family","🎶 Musical","⚔️ War","🤠 Western","🏛️ History"
+];
+
+const tagBtn = document.getElementById("tagDropdownBtn");
+const tagBox = document.getElementById("tagDropdown");
+const tagLabel = document.getElementById("tagDropdownLabel");
+
+// render dropdown
+tagBox.innerHTML = TAGS.map(t =>
+  `<div class="dropdown-item">${t}</div>`
+).join("");
+
+tagBtn.onclick = () => {
+  tagBox.classList.toggle("hidden");
+};
+
+tagBox.querySelectorAll(".dropdown-item").forEach(item => {
+  item.onclick = () => {
+    const t = item.innerText;
+    if (!tags.includes(t)) {
+      tags.push(t);
+      renderTags();
+    }
+    tagBox.classList.add("hidden");
+  };
+});
+
+// click outside
+document.addEventListener("click", e => {
+  if (!tagBtn.contains(e.target) && !tagBox.contains(e.target)) {
+    tagBox.classList.add("hidden");
+  }
+});
+
   const GENRE_MAP = {
   28: "🎬 Action",
   12: "🧭 Adventure",
@@ -30,8 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
   const modelA = document.getElementById("modelA");
   const modelB = document.getElementById("modelB");
-  const addTagBtn = document.getElementById("addTagBtn");
-  const tagSelect = document.getElementById("tagSelect");
   const tagContainer = document.getElementById("tagContainer");
   const analyzeBtn = document.getElementById("analyzeBtn");
   const reviewText = document.getElementById("reviewText");
@@ -57,36 +93,76 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("suggestionBox:", suggestionBox);
 
   // ================= LOAD MODELS =================
-  async function loadModels() {
-    const res = await fetch(API_BASE + "/models");
-    const models = await res.json();
+  let selectedModelA = null;
+let selectedModelB = null;
 
-    modelA.innerHTML = "";
-    modelB.innerHTML = "";
+const modelABtn = document.getElementById("modelABtn");
+const modelABox = document.getElementById("modelABox");
+const modelALabel = document.getElementById("modelALabel");
 
-    models.forEach(m => {
-      const label = m === "v5_ensemble" ? `${m} 🔥` : m;
-      modelA.innerHTML += `<option value="${m}">${label}</option>`;
-      modelB.innerHTML += `<option value="${m}">${label}</option>`;
-    });
+const modelBBtn = document.getElementById("modelBBtn");
+const modelBBox = document.getElementById("modelBBox");
+const modelBLabel = document.getElementById("modelBLabel");
 
-    modelA.value = models[0];
-    modelB.value = models[1] || models[0];
+async function loadModels() {
+  const res = await fetch(API_BASE + "/models");
+  const models = await res.json();
+
+  const renderItems = (box, onSelect) => {
+  const scroll = box.querySelector(".model-scroll");
+  scroll.innerHTML = "";
+
+  models.forEach(m => {
+    const div = document.createElement("div");
+    div.className = "dropdown-item";
+    div.innerText = m === "v5_ensemble" ? `${m} 🔥` : m;
+    div.onclick = () => onSelect(m);
+    scroll.appendChild(div);
+  });
+};
+
+  renderItems(modelABox, m => {
+    selectedModelA = m;
+    modelALabel.innerText = m;
+    modelABox.classList.add("hidden");
+  });
+
+  renderItems(modelBBox, m => {
+    selectedModelB = m;
+    modelBLabel.innerText = m;
+    modelBBox.classList.add("hidden");
+  });
+
+  // default
+  selectedModelA = models[0];
+  selectedModelB = models[1] || models[0];
+  modelALabel.innerText = selectedModelA;
+  modelBLabel.innerText = selectedModelB;
+}
+
+loadModels();
+modelABtn.onclick = () => {
+  modelABox.classList.toggle("hidden");
+};
+
+modelBBtn.onclick = () => {
+  modelBBox.classList.toggle("hidden");
+};
+
+document.addEventListener("click", e => {
+  if (!modelABtn.contains(e.target) && !modelABox.contains(e.target)) {
+    modelABox.classList.add("hidden");
   }
-
-  loadModels();
+  if (!modelBBtn.contains(e.target) && !modelBBox.contains(e.target)) {
+    modelBBox.classList.add("hidden");
+  }
+});
 
 
 /* ================= TAG SYSTEM ================= */
 reviewText.addEventListener("input", () => {
   setStep("input");
 });
-addTagBtn.onclick = () => {
-  const t = tagSelect.value;
-  if (!t || tags.includes(t)) return;
-  tags.push(t);
-  renderTags();
-};
 
 function renderTags() {
   tagContainer.innerHTML = "";
@@ -127,8 +203,9 @@ analyzeBtn.onclick = async () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         text: reviewText.value,
-        model_a: modelA.value,
-        model_b: modelB.value,
+        model_a: selectedModelA,
+        model_b: selectedModelB,
+
         tags: tags,
         movie_name: movieInput.value
       })
