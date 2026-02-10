@@ -27,7 +27,7 @@ It is designed for learning purposes, portfolio showcasing, and real-world API u
 
 | Layer | Technology |
 |------|------------|
-| Language | Python |
+| Language | Python / JavaScript / HTML / CSS |
 | Machine Learning | Scikit-learn / NLP Model |
 | Backend | FastAPI |
 | Server | Uvicorn |
@@ -44,19 +44,20 @@ movie-sentiment-ml-deployment/
 ```
 movie-sentiment-ml-deployment/
 │
-├── backend/                    # FastAPI backend & ML inference
+├── backend/                    # FastAPI backend, ML inference & frontend files
 │   ├── main.py                 # FastAPI entry point
 │   ├── download_models.py      # Download ML models from this GitHub repository
 │   ├── requirements.txt        # Backend dependencies
 │   ├── runtime.txt             # Python version for Render
-│   └── models/                 # Trained ML models
-│       ├── v1_baseline/
-│       ├── v2_error_boost/
-│       ├── v3_improved_tfidf/
-│       ├── v4_linear_svm/
-│       └── v5_ensemble/
-│
-│   ├──frontend/                   # Frontend (HTML / CSS / JavaScript)
+│   │
+│   ├── models/                 # Trained ML models
+│   │   ├── v1_baseline/
+│   │   ├── v2_error_boost/
+│   │   ├── v3_improved_tfidf/
+│   │   ├── v4_linear_svm/
+│   │   └── v5_ensemble/
+│   │
+│   └── frontend/               # Frontend (HTML / CSS / JavaScript)
 │       ├── index.html
 │       ├── script.js
 │       └── style.css
@@ -64,8 +65,8 @@ movie-sentiment-ml-deployment/
 └── README.md
 ```
 
-> ML models are stored in `backend/models/`  
-> and can also be automatically downloaded from this GitHub repository at runtime.
+> The frontend is served from the `backend/frontend/` directory  
+> while all ML models are managed under `backend/models/`.
 
 ```
 
