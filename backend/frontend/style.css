@@ -89,4 +89,73 @@
 #movieSuggestions {
   animation: fadeIn 0.2s ease-out;
 }
+select {
+  background-color: rgba(15, 15, 20, 0.95);
+  color: #e5e7eb;
+  border: 1px solid rgba(255,255,255,0.15);
+}
 
+select option {
+  background-color: #050508;
+  color: #e5e7eb;
+}
+/* ===== Cinematic Dropdown ===== */
+.dropdown-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: linear-gradient(
+    to right,
+    rgba(139,92,246,0.25),
+    rgba(99,102,241,0.25)
+  );
+  transform: translateX(4px);
+  color: white;
+}
+/* ===== Cinematic scroll dropdown ===== */
+.model-dropdown {
+  max-height: 320px;      /* ปรับได้ 280–360 */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+/* ===== Dark scrollbar ===== */
+#modelABox,
+#modelBBox {
+  background: rgba(5,5,8,0.95);
+}
+
+.model-scroll {
+  max-height: 170px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.model-scroll {
+  mask-image: linear-gradient(
+    to bottom,
+    black 85%,
+    transparent
+  );
+}
+/* ===== Cinematic scroll dropdown ===== */
+.tag-dropdown {
+  max-height: 170px;      /* ปรับได้ 280–360 */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.tag-scroll {
+  max-height: 150px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.tag-scroll {
+  mask-image: linear-gradient(
+    to bottom,
+    black 85%,
+    transparent
+  );
+}
