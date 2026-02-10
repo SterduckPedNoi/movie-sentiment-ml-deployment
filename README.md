@@ -46,11 +46,11 @@ movie-sentiment-ml-deployment/
 │   ├── requirements.txt        # Backend dependencies
 │   │
 │   ├── models/                 # Trained ML models
-│   │   ├── v1_baseline/
-│   │   ├── v2_error_boost/
-│   │   ├── v3_improved_tfidf/
-│   │   ├── v4_linear_svm/
-│   │   └── v5_ensemble/
+│   │   ├── v1_lr_heavy/
+│   │   ├── v2_svm_heavy/
+│   │   ├── v3_hybrid_word_char_svm/
+│   │   ├── v4_nb_svm/
+│   │   └── v5_ultra_ensemble/
 │   │
 │   └── frontend/               # Frontend (HTML / CSS / JavaScript)
 │       ├── index.html
