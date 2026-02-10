@@ -1,27 +1,24 @@
 # 🎬 Movie Sentiment Analysis API
 
-A **Machine Learning-powered Movie Review Sentiment Analysis API** built with FastAPI and deployed on Render.
+A Machine Learning-powered API for analyzing movie review sentiment, built with FastAPI and deployed on Render.
 
-Submit a movie review text and receive a **Positive or Negative sentiment prediction** in real time.
+Send a movie review as text and receive a real-time sentiment prediction: **Positive** or **Negative**.
 
 ---
 
-## 🚀 Project Overview
+## 🚀 Overview
 
-This project demonstrates how to build, serve, and deploy a Machine Learning model as a web API using modern backend tools.
+This project demonstrates a complete Machine Learning deployment workflow, from model inference to cloud deployment using FastAPI.
 
-It covers:
-- Machine Learning model inference
-- REST API development with FastAPI
-- Cloud deployment on Render (without Docker)
+It is designed for learning purposes, portfolio showcasing, and real-world API usage.
 
 ---
 
 ## ✨ Features
 
-- 🧠 ML-based sentiment classification  
-- ⚡ FastAPI backend with automatic API documentation  
-- 🌍 Cloud deployment on Render  
+- 🧠 Machine Learning-based sentiment classification  
+- ⚡ FastAPI backend with automatic Swagger documentation  
+- 🌍 Deployed on Render (Python environment, no Docker)  
 - 📡 RESTful API ready for integration  
 
 ---
@@ -31,123 +28,180 @@ It covers:
 | Layer | Technology |
 |------|------------|
 | Language | Python |
-| ML | Scikit-learn / NLP Model |
+| Machine Learning | Scikit-learn / NLP Model |
 | Backend | FastAPI |
 | Server | Uvicorn |
-| Cloud | Render |
+| Cloud Platform | Render |
 
 ---
 
 ## 📂 Project Structure
 
+```
+movie-sentiment-ml-deployment/
+## 📂 Project Structure
+
+```
 movie-sentiment-ml-deployment/
 │
-├── app/ # FastAPI application
-├── model/ # Trained ML model files
-├── requirements.txt # Python dependencies
-├── runtime.txt # Python runtime version 
+├── backend/                    # FastAPI backend & ML inference
+│   ├── main.py                 # FastAPI entry point
+│   ├── download_models.py      # Download ML models from this GitHub repository
+│   ├── requirements.txt        # Backend dependencies
+│   ├── runtime.txt             # Python version for Render
+│   └── models/                 # Trained ML models
+│       ├── v1_baseline/
+│       ├── v2_error_boost/
+│       ├── v3_improved_tfidf/
+│       ├── v4_linear_svm/
+│       └── v5_ensemble/
+│
+│   ├──frontend/                   # Frontend (HTML / CSS / JavaScript)
+│       ├── index.html
+│       ├── script.js
+│       └── style.css
+│
 └── README.md
+```
+
+> ML models are stored in `backend/models/`  
+> and can also be automatically downloaded from this GitHub repository at runtime.
+
+```
 
 ---
 
-## ⚙️ Local Setup
+## ⚙️ Local Installation
 
-### 1️⃣ Clone the Repository
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/SterduckPedNoi/movie-sentiment-ml-deployment.git
-cd movie-sentiment-ml-deployment ```
+cd movie-sentiment-ml-deployment
+```
 
-### 2️⃣ Install Dependencies
-``` python -m venv venv
+---
+
+### 2. Install dependencies
+
+```bash
+python -m venv venv
 source venv/bin/activate    # macOS / Linux
 venv\Scripts\activate       # Windows
 
 pip install -r requirements.txt
+```
 
-▶️ Run Locally
+---
+
+## ▶️ Run Locally
+
+```bash
 uvicorn app.main:app --reload
+```
 
+Open Swagger UI at:  
+http://localhost:8000/docs
 
-Open Swagger UI at:
-👉 http://localhost:8000/docs
+---
 
-☁️ Deployment on Render (No Docker)
+## ☁️ Deployment on Render (No Docker)
 
-This project is deployed on Render using a native Python environment.
+This application is deployed on Render using a native Python environment.
 
-🚀 Deployment Steps
+### Deployment Steps
 
-Go to https://render.com
- and create an account
+1. Create an account at https://render.com  
+2. Click **New → Web Service**  
+3. Connect your GitHub repository  
+4. Select **Python** as the environment  
 
-Click New → Web Service
+---
 
-Connect your GitHub repository
+### Render Configuration
 
-Choose Python as the environment
+Set the following commands in Render:
 
-⚙️ Render Configuration
+**Root Directory**
+```bash
+backend
+```
 
-Set the following values:
+**Build Command**
+```bash
+pip install -r requirements.txt && python download_models.py
+```
 
-Build Command
+**Start Command**
+```bash
+uvicorn main:app --host 0.0.0.0 --port $PORT
+```
 
-pip install -r requirements.txt
-
-
-Start Command
-
-uvicorn app.main:app --host 0.0.0.0 --port 10000
-
-
-Python Version
-
+**Python Version**
+```
 Defined in runtime.txt
+```
 
-🌍 Access the API
+---
+
+### Access the API
 
 After deployment, Render will provide a public URL:
 
-API Base URL
+- API Base URL  
+  ```
+  https://your-service-name.onrender.com
+  ```
 
-https://your-service-name.onrender.com
+- Swagger UI  
+  ```
+  https://your-service-name.onrender.com/docs
+  ```
 
+---
 
-Swagger Documentation
+### Cold Start Notice
 
-https://your-service-name.onrender.com/docs
+Render free-tier services may enter sleep mode when inactive.  
+The first request after inactivity may take a few seconds to respond.
 
-🧊 Cold Start Notice
+---
 
-Free-tier Render services may sleep during inactivity.
-The first request after a period of inactivity may take a few seconds.
+## 📡 API Reference
 
-📡 API Reference
-POST /predict
-Request
+### POST `/predict`
+
+**Request Body**
+```json
 {
   "text": "This movie was absolutely amazing!"
 }
+```
 
-Response
+**Response**
+```json
 {
   "prediction": "Positive",
   "confidence": 0.92
 }
 ```
 
-🎯 Use Cases
+---
 
-Movie review sentiment analysis
+## 🎯 Use Cases
 
-NLP API demo project
+- Movie review sentiment analysis  
+- NLP API demo project  
+- Machine Learning deployment portfolio  
+- Backend service for AI applications  
 
-Machine Learning deployment portfolio
+---
 
-Backend service for AI applications
+## 👨‍💻 Author
 
-👨‍💻 Author
-
-SterduckPedNoi
+SterduckPedNoi  
 GitHub: https://github.com/SterduckPedNoi
+
+---
+
+## ❤️ Built with FastAPI and Machine Learning
