@@ -50,7 +50,7 @@ movie-sentiment-ml-deployment/
 │   │   ├── v2_svm_heavy/
 │   │   ├── v3_hybrid_word_char_svm/
 │   │   ├── v4_nb_svm/
-│   │   └── v5_ultra_ensemble/
+│   │   └── v5_ensemble/
 │   │
 │   └── frontend/               # Frontend (HTML / CSS / JavaScript)
 │       ├── index.html
