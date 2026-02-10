@@ -131,8 +131,7 @@ analyzeBtn.onclick = async () => {
     renderResult(data);
 
   } catch (err) {
-    alert("❌ Analysis failed. Please try again.
-");
+    alert("❌ Analysis failed. Please try again.");
     console.error(err);
   }
 
