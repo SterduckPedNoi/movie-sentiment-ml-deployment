@@ -33,21 +33,18 @@ document.addEventListener("click", (e) => {
   37: "🤠 Western"
 };
 
-
   // ================= ELEMENTS =================
+  
   const modelA = document.getElementById("modelA");
   const modelB = document.getElementById("modelB");
-  
   const addTagBtn = document.getElementById("addTagBtn");
   const tagSelect = document.getElementById("tagSelect");
   const tagContainer = document.getElementById("tagContainer");
-
   const analyzeBtn = document.getElementById("analyzeBtn");
   const reviewText = document.getElementById("reviewText");
+  const loadingSection = document.getElementById("loadingSection");
   const movieInput = document.getElementById("movieName");
   const suggestionBox = document.getElementById("movieSuggestions");
-
-
   const result = document.getElementById("result");
   const resultSection = document.getElementById("resultSection");
   const movieTitleShow = document.getElementById("movieTitleShow");
@@ -55,7 +52,6 @@ document.addEventListener("click", (e) => {
 
   console.log("movieInput:", movieInput);
   console.log("suggestionBox:", suggestionBox);
-
 
   // ================= LOAD MODELS =================
   async function loadModels() {
@@ -108,26 +104,43 @@ window.removeTag = function (t) {
 /* ================= ANALYZE ================= */
 analyzeBtn.onclick = async () => {
   if (!reviewText.value.trim()) {
-    alert("เขียนรีวิวก่อนเพื่อน 😅");
+    alert("Please write a review. 😅");
     return;
   }
 
-  const res = await fetch(API_COMPARE, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      text: reviewText.value,
-      model_a: modelA.value,
-      model_b: modelB.value,
-      tags: tags,
-      movie_name: movieName.value
-    })
-  });
+  // ===== START LOADING =====
+  analyzeBtn.disabled = true;
+  analyzeBtn.innerText = "⏳ Analyzing...";
+  loadingSection.classList.remove("hidden");
+  resultSection.classList.add("hidden");
 
-  const data = await res.json();
-  renderResult(data);
+  try {
+    const res = await fetch(API_COMPARE, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        text: reviewText.value,
+        model_a: modelA.value,
+        model_b: modelB.value,
+        tags: tags,
+        movie_name: movieInput.value
+      })
+    });
+
+    const data = await res.json();
+    renderResult(data);
+
+  } catch (err) {
+    alert("❌ Analysis failed. Please try again.
+");
+    console.error(err);
+  }
+
+  // ===== END LOADING =====
+  analyzeBtn.disabled = false;
+  analyzeBtn.innerText = "🚀 Analyze Review";
+  loadingSection.classList.add("hidden");
 };
-
 function renderResult(data) {
   result.innerHTML = "";
   resultSection.classList.remove("hidden");
